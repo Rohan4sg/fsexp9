@@ -19,4 +19,14 @@ jobs:
     - run: npm test -- --watchAll=false
     - run: npm run build
 
-    - run: docker build -t fsexp9-app .
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build Docker Image
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/fsexp9-app:latest .
+
+    - name: Push Docker Image
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/fsexp9-app:latest
